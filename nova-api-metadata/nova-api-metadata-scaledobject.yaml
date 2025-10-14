@@ -1,0 +1,32 @@
+# nova-api-metadata-scaledobject.yaml
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: nova-api-metadata-scaler
+  namespace: scale-disw-na-wiv
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: nova-api-metadata
+
+  # Recommended to set to 2 for high availability
+  minReplicaCount: 1
+  maxReplicaCount: 20
+  pollingInterval: 30
+
+  triggers:
+    - type: prometheus
+      metadata:
+        serverAddress: https://ds.groundcover.com/datasources/prometheus
+        
+        threshold: "30"
+
+        # The definitive query we decided on
+        query: |
+          sum(rate(groundcover_workload_total_counter{workload="nova-api-metadata", namespace="scale-disw-na-wiv", cluster="ops-opex-pcd-staging-us-west-2-app-dataplane-1", env="ops-opex-pcd-staging", type="http"}[1m]))
+        
+        authModes: custom
+      authenticationRef:
+        name: groundcover-trigger-auth
+        kind: ClusterTriggerAuthentication

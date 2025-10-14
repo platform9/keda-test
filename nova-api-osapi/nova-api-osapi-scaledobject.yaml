@@ -1,4 +1,4 @@
-# nova-api-scaledobject.yaml
+# nova-api-osapi-scaledobject.yaml
 apiVersion: keda.sh/v1alpha1
 kind: ScaledObject
 metadata:
@@ -12,7 +12,7 @@ spec:
 
   # Recommended to set to 2 for high availability
   minReplicaCount: 1
-  maxReplicaCount: 10
+  maxReplicaCount: 20
   pollingInterval: 30
 
   triggers:
@@ -20,7 +20,7 @@ spec:
       metadata:
         serverAddress: https://ds.groundcover.com/datasources/prometheus
         
-        threshold: "5"
+        threshold: "30"
 
         # The definitive query we decided on
         query: |

@@ -1,0 +1,13 @@
+# groundcover-trigger-auth.yaml
+apiVersion: keda.sh/v1alpha1
+kind: ClusterTriggerAuthentication
+metadata:
+  name: groundcover-trigger-auth
+spec:
+  secretTargetRef:
+    - parameter: customAuthHeader
+      name: groundcover-ds-api-key-header
+      key: headerName
+    - parameter: customAuthValue
+      name: groundcover-ds-api-key-header
+      key: headerValue
